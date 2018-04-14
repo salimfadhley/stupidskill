@@ -1,9 +1,19 @@
 FROM salimfadhley/skillbase
 
-RUN mkdir /app
+COPY app /app
 
-COPY install.sh /app/
+RUN mkdir /app_install
+
+COPY app/requirements.txt app_install/
+
+RUN pip install --upgrade -r /app_install/requirements.txt
+
+RUN rm -rf /app_install
 
 WORKDIR /app
 
-RUN ./install.sh
+ENV PYTHONPATH /app/
+
+ENTRYPOINT ["/usr/local/bin/python"]
+
+CMD ["-m", "main"]
